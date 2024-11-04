@@ -39,6 +39,24 @@ def calcular_nombres(lista,genero):
             conjunto_filtrado.add(nacimiento.nombre)
     return conjunto_filtrado
 
+def calcular_top_nombres_de_año(lista,año,limite,genero): 
+    """
+    Recibe una lista de tuplas de tipo FrecuenciaNombre, un año de tipo int, un número límite de tipo int y 
+    un género de tipo str, y devuelve una lista de tuplas (nombre, frecuencia) de tipo (str, int) 
+    con los nombres más frecuentes del año y el género dados, ordenada de mayor a menor frecuencia, 
+    y con un máximo de límite nombres. El género puede ser 'Hombre', 'Mujer' o tener un valor None, en cuyo caso 
+    se incluyen en la lista todos los nombres. El valor por defecto del límite es 10 y el del género es None.
+    """
+    nacimiento_filtrado = []
+    if limite == None:
+        limite = 10
+    for nacimiento in lista:
+        if nacimiento.año == año and (genero == None or nacimiento.genero == genero):
+            nacimiento_filtrado.append([nacimiento.nombre, nacimiento.frecuencia])
+    nacimiento_f = sorted(nacimiento_filtrado,key=lambda tupla:tupla[1],reverse=True)
+    #nacimiento_filtrado.sort(key= lambda tupla:tupla[1],reverse=True)
+    return nacimiento_f[:limite]
+
 def calcular_nombres_ambos_generos(lista): 
     """
     Recibe una lista de tuplas de tipo FrecuenciaNombre, y devuelve un conjunto {str} 
@@ -113,7 +131,7 @@ def calcular_nombres_mas_frecuentes(lista,genero,decada,n):
     while len(nombres_frecuentes) < n:
         max = None
         for nacimiento in lista:
-            if nacimiento.genero == genero and nacimiento.año >= decada and nacimiento.año < decada+10 and nacimiento.nombre not in nombres_frecuentes and\
+            if nacimiento.genero == genero and nacimiento.año >= decada and nacimiento.año <= decada+9 and nacimiento.nombre not in nombres_frecuentes and\
                 (max == None or max.frecuencia < nacimiento.frecuencia):
                 max = nacimiento
         nombres_frecuentes.append(max.nombre)
